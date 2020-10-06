@@ -1,1 +1,1 @@
-# Simple D3 Rollup setup
+# Simple three js Rollup setup
