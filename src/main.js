@@ -18,7 +18,7 @@ scene.add(cube);
 camera.position.z = 5;
 
 
-function animate(scene, camera, cube, renderer) {
+const animate = (scene, camera, cube, renderer) => {
   requestAnimationFrame(() => {
     animate(scene, camera, cube, renderer);
   });
@@ -28,8 +28,7 @@ function animate(scene, camera, cube, renderer) {
   renderer.render(scene, camera);
 }
 
-
-function onWindowResize() {
+const onWindowResize = () => {
   camera.aspect = center;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
