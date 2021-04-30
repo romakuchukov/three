@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { OrbitControls } from '../../three.js/examples/jsm/controls/OrbitControls';
 
 const mouse = new THREE.Vector2( 1, 1 );
 
@@ -37,6 +38,11 @@ renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.minPolarAngle = Math.PI/2;
+controls.maxPolarAngle = Math.PI/2;
+controls.enableZoom = false;
 
 
 window.addEventListener('resize', onWindowResize);
