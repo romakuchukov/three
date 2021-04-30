@@ -1,10 +1,9 @@
 import babel from 'rollup-plugin-babel';
+import copy from 'rollup-plugin-copy-assets';
 import node from 'rollup-plugin-node-resolve';
 
 const src = 'src/';
 const dist = 'dist';
-
-const plugins = [node(), babel()];
 
 export default [{
   input: `${src}main.js`,
@@ -14,5 +13,11 @@ export default [{
     dir: dist,
     entryFileNames: 'main.min.js'
   },
-  plugins
+  plugins: [
+    node(),
+    babel(),
+    copy({
+      assets: ['models/json/suzanne_buffergeometry.json']
+    })
+  ]
 }];
