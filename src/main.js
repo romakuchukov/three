@@ -1,9 +1,6 @@
 import * as THREE from 'three';
 
-import Stats from './jsm/libs/stats.module.js';
-import { GUI } from './jsm/libs/dat.gui.module.js';
-
-let camera, scene, renderer, stats;
+let camera, scene, renderer;
 
 let mesh;
 const amount = parseInt(window.location.search.substr(1)) || 10;
@@ -35,54 +32,28 @@ function init() {
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
     scene.add(mesh);
 
-    //
-
-    const gui = new GUI();
-    //gui.add(mesh, 'count', 0, count);
-
   });
-
-  //
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  //
-
-  stats = new Stats();
-  document.body.appendChild(stats.dom);
-
-  //
-
   window.addEventListener('resize', onWindowResize);
-
 }
 
 function onWindowResize() {
-
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-
   renderer.setSize(window.innerWidth, window.innerHeight);
-
 }
 
-//
-
 function animate() {
-
   requestAnimationFrame(animate);
-
   render();
-
-  stats.update();
-
 }
 
 function render() {
-
   if (mesh) {
 
     const time = Date.now() * 0.001;
@@ -94,29 +65,19 @@ function render() {
     const offset = (amount - 1) / 2;
 
     for (let x = 0; x < amount; x ++) {
-
       for (let y = 0; y < amount; y ++) {
-
         for (let z = 0; z < amount; z ++) {
-
           dummy.position.set(offset - x, offset - y, offset - z);
           dummy.rotation.y = (Math.sin(x / 4 + time) + Math.sin(y / 4 + time) + Math.sin(z / 4 + time));
           dummy.rotation.z = dummy.rotation.y * 2;
-
           dummy.updateMatrix();
-
           mesh.setMatrixAt(i ++, dummy.matrix);
-
         }
-
       }
-
     }
 
     mesh.instanceMatrix.needsUpdate = true;
-
   }
 
   renderer.render(scene, camera);
-
 }
