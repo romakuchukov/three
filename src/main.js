@@ -43,6 +43,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.minPolarAngle = Math.PI/2;
 controls.maxPolarAngle = Math.PI/2;
 controls.enableZoom = false;
+controls.autoRotate = true;
 
 
 window.addEventListener('resize', onWindowResize);
@@ -56,6 +57,7 @@ function onWindowResize() {
 
 function animate() {
   requestAnimationFrame(animate);
+  controls.update();
   render();
 }
 
