@@ -3,19 +3,29 @@ import { OrbitControls } from '../../three.js/examples/jsm/controls/OrbitControl
 
 const mouse = new THREE.Vector2( 1, 1 );
 
-let camera, scene, renderer;
-
 let mesh;
-const amount = 10;
+
+const amount = 6;
 const count = Math.pow(amount, 3);
 const dummy = new THREE.Object3D();
 const middle = window.innerWidth / window.innerHeight;
 
-camera = new THREE.PerspectiveCamera(60, middle, 0.1, 100);
+let camera = new THREE.PerspectiveCamera(60, middle, 0.1, 100);
+let scene = new THREE.Scene();
+let renderer = new THREE.WebGLRenderer({ antialias: true });
+
 camera.position.set(4, 4, 15);
 camera.lookAt(0, 0, 0);
 
-scene = new THREE.Scene();
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+
+controls.minPolarAngle = Math.PI/2;
+controls.maxPolarAngle = Math.PI/2;
+controls.enableZoom = false;
+controls.autoRotate = true;
 
 const loader = new THREE.BufferGeometryLoader();
 loader.load('dist/models/json/suzanne_buffergeometry.json', geometry => {
@@ -24,8 +34,6 @@ loader.load('dist/models/json/suzanne_buffergeometry.json', geometry => {
   geometry.scale(0.5, 0.5, 0.5);
 
   const material = new THREE.MeshNormalMaterial();
-  // check overdraw
-  // let material = new THREE.MeshBasicMaterial({ color: 0xff0000, opacity: 0.1, transparent: true });
 
   mesh = new THREE.InstancedMesh(geometry, material, count);
   mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
@@ -34,17 +42,7 @@ loader.load('dist/models/json/suzanne_buffergeometry.json', geometry => {
 
 });
 
-renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.minPolarAngle = Math.PI/2;
-controls.maxPolarAngle = Math.PI/2;
-controls.enableZoom = false;
-controls.autoRotate = true;
-
 
 window.addEventListener('resize', onWindowResize);
 animate();
@@ -57,16 +55,15 @@ function onWindowResize() {
 
 function animate() {
   requestAnimationFrame(animate);
-  controls.update();
   render();
 }
 
 function render() {
   if (mesh) {
-    //mesh.rotation.y += .01;
+    mesh.rotation.y += .01;
 
     let i = 0;
-    const offset = 5;
+    const offset = (amount-1)/2;
 
     for (let x = 0; x < amount; x ++) {
       for (let y = 0; y < amount; y ++) {
